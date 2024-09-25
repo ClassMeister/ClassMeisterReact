@@ -1,7 +1,4 @@
-
-
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
@@ -32,6 +29,48 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+const coursesRef = firebase.database().ref('courses');
+const studentsRef = firebase.database().ref('students');
+
+const newCourse = {
+  name: "Course Name",
+  teacherId: "teacherId1"
+};
+
+coursesRef.push(newCourse);
+
+coursesRef.on('value', (snapshot) => {
+  const coursesData = snapshot.val();
+  console.log(coursesData);
+});
+
+
+
+function CourseManagement() {
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const coursesRef = firebase.database().ref('courses');
+    coursesRef.on('value', (snapshot) => {
+      setCourses(snapshot.val());
+    });
+  }, []);
+
+  const handleCreateCourse = (courseName) => {
+    const newCourse = {
+      name: courseName,
+      teacherId: "teacherId1" // Replace with actual teacher ID
+    };
+
+    coursesRef.push(newCourse);
+  };
+
+  // ... other functions for editing, deleting, etc.
+
+  return (
+    // ... JSX for rendering the course list and input fields
+  );
+}
 // import React from 'react';
 // import ReactDOM from 'react-dom/client';
 // import './index.css';
